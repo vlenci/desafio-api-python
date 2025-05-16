@@ -3,8 +3,8 @@ from config import API_EXTERNAL_URL
 from auth import Account, get_token
 
 
-def get_lubricants():
-    url = f"{API_EXTERNAL_URL}/implantation/mobile/static/get_lubricants"
+def get_user_data():
+    url = f"{API_EXTERNAL_URL}/usercorp"
     credentials = Account(username="dev_intern", password="nTinIctUAtwAtO")
     token = get_token(credentials)
     access_token = token["access"]

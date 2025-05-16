@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from auth import get_token, Account
-from api_client import get_lubricants
+from api_client import get_user_data
 
 app = FastAPI()
 
@@ -10,6 +10,6 @@ def login_route(account: Account):
     return get_token(account)
 
 
-@app.get("/lubricants")
-def lubricants_route():
-    return get_lubricants()
+@app.get("/usercorp")
+def usercorp_route():
+    return get_user_data()
