@@ -8,9 +8,17 @@ class Account(BaseModel):
     password: str
 
 
+"""class Lubricant(BaseModel):
+    id: int
+    name: str
+    lubricants: List[Dict]"""
+
+
 def get_token(account: Account):
     url = f"{API_EXTERNAL_URL}/token"
     user_data = {"username": account.username, "password": account.password}
+
     response = requests.post(url, data=user_data)
     response.raise_for_status()
+
     return response.json()
