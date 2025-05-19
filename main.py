@@ -1,8 +1,10 @@
 from fastapi import Depends, FastAPI
-from auth import get_bearer_token, get_token, verify_token, refresh_token, Account
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from auth import get_token, verify_token, refresh_token, Account
 from api_client import get_user_data
 
 app = FastAPI()
+app_scheme = HTTPBearer()
 
 
 @app.post("/token")
@@ -21,5 +23,7 @@ def refresh_route(token: str):
 
 
 @app.get("/usercorp")
-def usercorp_route(token: str = Depends(get_bearer_token)):
+def usercorp_route(credentials: HTTPAuthorizationCredentials = Depends(app_scheme)):
+    token = credentials.credentials
+
     return get_user_data(token)

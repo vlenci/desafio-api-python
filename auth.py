@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Header
+from fastapi import HTTPException
 import requests
 from config import API_EXTERNAL_URL
 from pydantic import BaseModel
@@ -20,14 +20,6 @@ def get_token(account: Account):
         raise HTTPException(
             status_code=err.response.status_code, detail=err.response.json()
         )
-
-
-def get_bearer_token(authorization: str = Header(...)) -> str:
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(
-            status_code=401, detail="Invalid authorization header format"
-        )
-    return authorization.split(" ")[1]
 
 
 def verify_token(token: str):
