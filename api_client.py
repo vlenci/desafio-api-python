@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 import requests
 from config import API_EXTERNAL_URL
 
@@ -10,7 +11,12 @@ def get_user_data(access_token: str):
         response.raise_for_status()
         return response.json()
     except requests.HTTPError as err:
-        raise Exception(f"API error: {err.response.status_code} - {err.response.text}")
+        status = err.response.status_code
+        try:
+            detail = err.response.json()
+        except ValueError:
+            detail = err.response.text
+        raise HTTPException(status_code=status, detail=detail)
 
 
 def get_tree(access_token: str, site_id: int):
@@ -21,4 +27,9 @@ def get_tree(access_token: str, site_id: int):
         response.raise_for_status()
         return response.json()
     except requests.HTTPError as err:
-        raise Exception(f"API error: {err.response.status_code} - {err.response.text}")
+        status = err.response.status_code
+        try:
+            detail = err.response.json()
+        except ValueError:
+            detail = err.response.text
+        raise HTTPException(status_code=status, detail=detail)
