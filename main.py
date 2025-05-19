@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from auth import get_token, verify_token, refresh_token, Account
-from api_client import get_user_data
+from api_client import get_user_data, get_tree
 
 app = FastAPI()
 app_scheme = HTTPBearer()
@@ -27,3 +27,12 @@ def usercorp_route(credentials: HTTPAuthorizationCredentials = Depends(app_schem
     token = credentials.credentials
 
     return get_user_data(token)
+
+
+@app.get("/implantation/mobile/tree")
+def tree_route(
+    credentials: HTTPAuthorizationCredentials = Depends(app_scheme), site_id: int = 0
+):
+    token = credentials.credentials
+
+    return get_tree(token, site_id)
