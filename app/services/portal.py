@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 import requests
-from config import API_EXTERNAL_URL
+from app.config import API_EXTERNAL_URL
 
 
 def get_user_data(access_token: str):

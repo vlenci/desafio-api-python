@@ -1,12 +1,7 @@
 from fastapi import HTTPException
 import requests
-from config import API_EXTERNAL_URL
-from pydantic import BaseModel
-
-
-class Account(BaseModel):
-    username: str
-    password: str
+from app.config import API_EXTERNAL_URL
+from app.auth.models import Account
 
 
 def get_token(account: Account):
