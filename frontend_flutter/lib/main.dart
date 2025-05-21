@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:frontend_flutter/pages/login.dart';
+import 'package:frontend_flutter/providers/auth_provider.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,8 +12,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Olá Mundo!'))),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthProvider())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'API Flutter App',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: const LoginPage(),
+      ),
     );
   }
 }
