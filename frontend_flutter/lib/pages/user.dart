@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_flutter/models/json_viewer.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../services/api_service.dart';
@@ -22,7 +23,7 @@ class UserPage extends StatelessWidget {
           } else {
             return Padding(
               padding: const EdgeInsets.all(16),
-              child: Text(snapshot.data.toString()),
+              child: JsonViewer(snapshot.data),
             );
           }
         },

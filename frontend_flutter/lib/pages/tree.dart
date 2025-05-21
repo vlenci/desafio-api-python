@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_flutter/models/json_viewer.dart';
 import 'package:provider/provider.dart';
 import '../services/api_service.dart';
 import '../providers/auth_provider.dart';
@@ -64,10 +65,7 @@ class _TreePageState extends State<TreePage> {
             const SizedBox(height: 20),
             if (_error != null)
               Text(_error!, style: const TextStyle(color: Colors.red)),
-            if (_treeData != null)
-              Expanded(
-                child: SingleChildScrollView(child: Text(_treeData.toString())),
-              ),
+            if (_treeData != null) Expanded(child: JsonViewer(_treeData)),
           ],
         ),
       ),
