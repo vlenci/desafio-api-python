@@ -27,7 +27,7 @@ class ApiService {
 
   static Future<dynamic> getTree(String token, int siteId) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/tree?site_id=$siteId'),
+      Uri.parse('$baseUrl/implantation/mobile/tree?site_id=$siteId'),
       headers: {'Authorization': 'Bearer $token'},
     );
     return jsonDecode(response.body);
