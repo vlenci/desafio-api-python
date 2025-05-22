@@ -16,7 +16,7 @@ class MainApp extends StatelessWidget {
       providers: [ChangeNotifierProvider(create: (_) => AuthProvider())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'API Flutter App',
+        title: 'Internship API Challenge - SEMEQ',
         theme: ThemeData(primarySwatch: Colors.blue),
         home: const LoginPage(),
       ),

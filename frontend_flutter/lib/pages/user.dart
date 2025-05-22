@@ -12,7 +12,16 @@ class UserPage extends StatelessWidget {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Dados do Usuário')),
+      appBar: AppBar(
+        title: const Text(
+          'Dados do Usuário',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w200),
+        ),
+        backgroundColor: Color(0xFF0C113D),
+        iconTheme: const IconThemeData(color: Colors.white),
+        foregroundColor: Colors.white,
+        centerTitle: true,
+      ),
       body: FutureBuilder(
         future: ApiService.getUserData(token),
         builder: (context, snapshot) {

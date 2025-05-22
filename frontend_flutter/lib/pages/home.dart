@@ -14,10 +14,31 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Página Inicial'),
+        backgroundColor: Color(0xFF0C113D),
+        title: Image.asset('assets/logo-semeq-branco.png', height: 30),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(40),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            color: Color.fromARGB(255, 7, 10, 36),
+            width: double.infinity,
+            height: 40,
+            child: Text(
+              "Home",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ),
+        ),
+
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
+            color: Colors.white,
             onPressed: () {
               auth.logout();
               Navigator.pushReplacement(
@@ -35,23 +56,55 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll<Color>(
+                    Color(0xFFe46c1c),
+                  ),
+                  minimumSize: WidgetStatePropertyAll(Size(200, 60)),
+                  padding: WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 36, vertical: 24),
+                  ),
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const UserPage()),
                   );
                 },
-                child: const Text('Ver Dados do Usuário'),
+                child: const Text(
+                  'Ver Dados do Usuário',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               const SizedBox(height: 40),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll<Color>(
+                    Color(0xFFe46c1c),
+                  ),
+                  minimumSize: WidgetStatePropertyAll(Size(200, 60)),
+                  padding: WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 54, vertical: 24),
+                  ),
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const TreePage()),
                   );
                 },
-                child: const Text('Ver Estrutura de Árvore'),
+                child: const Text(
+                  'Consultar Árvore',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),

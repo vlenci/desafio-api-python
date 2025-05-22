@@ -45,7 +45,16 @@ class _TreePageState extends State<TreePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Consultar Árvore')),
+      appBar: AppBar(
+        title: const Text(
+          'Consultar Árvore',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w200),
+        ),
+        backgroundColor: Color(0xFF0C113D),
+        iconTheme: const IconThemeData(color: Colors.white),
+        foregroundColor: Colors.white,
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -59,8 +68,14 @@ class _TreePageState extends State<TreePage> {
             _loading
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Color(0xFF0C113D)),
+                  ),
                   onPressed: _fetchTree,
-                  child: const Text('Buscar'),
+                  child: const Text(
+                    'Buscar',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
             const SizedBox(height: 20),
             if (_error != null)
