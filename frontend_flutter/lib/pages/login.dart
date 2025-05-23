@@ -19,12 +19,19 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login() async {
     setState(() => _loading = true);
 
-    final token = await ApiService.login(_username.text, _password.text);
+    final token = await ApiService.login(
+      _username.text.trim(),
+      _password.text.trim(),
+    );
 
     setState(() => _loading = false);
 
-    if (token != null) {
-      Provider.of<AuthProvider>(context, listen: false).setToken(token);
+    if (token != null && token['access'] != null && token['refresh'] != null) {
+      Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).setTokens(access: token['access'], refresh: token['refresh']);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomePage()),

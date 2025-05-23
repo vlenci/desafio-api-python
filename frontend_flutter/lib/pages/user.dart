@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_flutter/models/json_viewer.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import '../services/api_service.dart';
+import 'package:frontend_flutter/services/api_service.dart';
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
 
+  Future<dynamic> _fetchUserData(BuildContext context) async {
+    return await ApiService.getUserData(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final token = Provider.of<AuthProvider>(context, listen: false).token;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -23,7 +23,7 @@ class UserPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: ApiService.getUserData(token),
+        future: _fetchUserData(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

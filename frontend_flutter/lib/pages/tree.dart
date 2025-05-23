@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_flutter/models/json_viewer.dart';
-import 'package:provider/provider.dart';
 import '../services/api_service.dart';
-import '../providers/auth_provider.dart';
 
 class TreePage extends StatefulWidget {
   const TreePage({super.key});
@@ -13,32 +11,50 @@ class TreePage extends StatefulWidget {
 
 class _TreePageState extends State<TreePage> {
   final TextEditingController _siteIdController = TextEditingController();
-  bool _loading = false;
+
   dynamic _treeData;
+  bool _isLoading = false;
   String? _error;
 
-  Future<void> _fetchTree() async {
-    final token = Provider.of<AuthProvider>(context, listen: false).token;
-    final siteId = int.tryParse(_siteIdController.text);
+  @override
+  void initState() {
+    super.initState();
+    if (_siteIdController.text.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        fetchTree();
+      });
+    }
+  }
 
+  Future<void> fetchTree() async {
+    final siteId = int.tryParse(_siteIdController.text);
     if (siteId == null) {
-      setState(() => _error = 'Insira um ID de site válido.');
+      setState(() {
+        _error = 'Insira um ID de site válido.';
+        _treeData = null;
+      });
       return;
     }
 
     setState(() {
-      _loading = true;
+      _isLoading = true;
       _error = null;
       _treeData = null;
     });
 
     try {
-      final data = await ApiService.getTree(token, siteId);
-      setState(() => _treeData = data);
+      final data = await ApiService.getTree(context, siteId);
+      setState(() {
+        _treeData = data;
+      });
     } catch (e) {
-      setState(() => _error = 'Erro ao buscar árvore: $e');
+      setState(() {
+        _error = 'Erro ao buscar árvore: $e';
+      });
     } finally {
-      setState(() => _loading = false);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -50,7 +66,7 @@ class _TreePageState extends State<TreePage> {
           'Consultar Árvore',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w200),
         ),
-        backgroundColor: Color(0xFF0C113D),
+        backgroundColor: const Color(0xFF0C113D),
         iconTheme: const IconThemeData(color: Colors.white),
         foregroundColor: Colors.white,
         centerTitle: true,
@@ -63,15 +79,16 @@ class _TreePageState extends State<TreePage> {
               controller: _siteIdController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(labelText: 'ID do site'),
+              onSubmitted: (_) => fetchTree(),
             ),
             const SizedBox(height: 20),
-            _loading
+            _isLoading
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
-                  style: ButtonStyle(
+                  style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Color(0xFF0C113D)),
                   ),
-                  onPressed: _fetchTree,
+                  onPressed: fetchTree,
                   child: const Text(
                     'Buscar',
                     style: TextStyle(color: Colors.white),

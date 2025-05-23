@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 
 class AuthProvider extends ChangeNotifier {
-  String _token = '';
+  String _accessToken = '';
+  String _refreshToken = '';
 
-  String get token => _token;
+  String get accessToken => _accessToken;
+  String get refreshToken => _refreshToken;
 
-  void setToken(String newToken) {
-    _token = newToken;
+  void setTokens({required String access, required String refresh}) {
+    _accessToken = access;
+    _refreshToken = refresh;
+    notifyListeners();
+  }
+
+  void updateAccessToken(String newAccess) {
+    _accessToken = newAccess;
     notifyListeners();
   }
 
   void logout() {
-    _token = '';
+    _accessToken = '';
+    _refreshToken = '';
     notifyListeners();
   }
 
-  bool get isAuthenticated => _token.isNotEmpty;
+  bool get isAuthenticated => _accessToken.isNotEmpty;
 }
