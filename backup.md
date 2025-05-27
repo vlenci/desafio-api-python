@@ -9,31 +9,24 @@
     This documentation has been created to guide how to install, use and test this challenge project, which consists of a Flutter-based mobile application (frontend) and a Python FastAPI-based API (backend).
 </p>
 
-<h2 align="center">
-  DISCLAIMER
-</h2>
-<p align="center">
-    This project is for study purposes only. It is not an official product of SEMEQ.
-</p>
-
 ## Summary
 
-  * [1. Project Overview](#1-project-overview)
-  * [2. Architecture Overview](#2-architecture-overview)
-  * [3. Project Structure](#3-project-structure)
-  * [4. Prerequisites](#4-prerequisites)
-      * [4.1. Git](#41-git)
-      * [4.2. Flutter SDK](#42-flutter-sdk)
-      * [4.3. Python](#43-python)
-  * [5. Getting Started](#5-getting-started)
-      * [5.1. Clone the Repository](#51-clone-the-repository)
-      * [5.2. Backend Setup and Run](#52-backend-setup-and-run)
-      * [5.3. Frontend Setup and Run](#53-frontend-setup-and-run)
-  * [6. Application Screenshots and Usage Flow](#6-application-screenshots-and-usage-flow)
-  * [7. Authentication Flow](#7-authentication-flow)
-  * [8. API Call Examples](#8-api-call-examples)
-      * [8.1. Authentication Endpoints](#81-authentication-endpoints)
-      * [8.2. Data Endpoints (Requires Authentication)](#82-data-endpoints-requires-authentication)
+* [1. Project Overview](#1-project-overview)
+* [2. Architecture Overview](#2-architecture-overview)
+* [3. Project Structure](#3-project-structure)
+* [4. Getting Started](#4-getting-started)
+    * [4.1. Install Git](#41-install-git)
+    * [4.2. Clone the Repository](#42-clone-the-repository)
+* [5. Installation Requirements](#5-installation-requirements)
+    * [5.1. Frontend (Flutter)](#51-frontend-flutter)
+    * [5.2. Backend (FastAPI)](#52-backend-fastapi)
+* [6. How to Use](#6-how-to-use)
+    * [6.1. Backend Setup and Run](#61-backend-setup-and-run)
+    * [6.2. Frontend Setup and Run](#62-frontend-setup-and-run)
+* [7. Authentication Flow](#7-authentication-flow)
+* [8. API Call Examples](#8-api-call-examples)
+    * [8.1. Authentication Endpoints](#81-authentication-endpoints)
+    * [8.2. Data Endpoints (Requires Authentication)](#82-data-endpoints-requires-authentication)
 
 ## 1\. Project Overview
 
@@ -41,10 +34,7 @@ This project implements a mobile application with a Flutter frontend that intera
 
 ## 2\. Architecture Overview
 
-<img src="./readme_images/architerure_overview_diagram.jpg" alt="Architecture Overview Diagram" width="900" />
-
-<br>
-The data flow usually starts from the frontend, which sends requests to the backend. The backend, in turn, processes these requests, interacts with the external API, and returns the responses to the frontend.
+<img src="./readme_images/architerure_overview_diagram.jpg" alt="Example in Insomnia of POST /token" width="900" />
 
 ## 3\. Project Structure
 
@@ -83,56 +73,61 @@ desafio-api-python/
 └── requirements.txt        # Python dependencies for the backend
 ```
 
------
+## 4\. Getting Started
 
-## 4\. Prerequisites
+To begin, you need to have Git installed on your system to clone the repository.
 
-Before you begin setting up the project, ensure you have the following system-level tools installed:
+### 4.1. Install Git
 
-### 4.1. Git
-
-Git is required to clone the repository.
 If you don't have Git installed, download and install it from the official website: [Git Downloads](https://git-scm.com/downloads).
 
-### 4.2. Flutter SDK
+### 4.2. Clone the Repository
 
-The Flutter SDK is required for the frontend application.
-Install Flutter by following the official guide: [Flutter Get Started](https://flutter.dev/docs/get-started). Ensure that the `flutter` command is in your system's PATH.
-
-### 4.3. Python
-
-Python is required for the backend API.
-Ensure you have Python 3.8+ installed. You can download it from the [official Python website](https://www.python.org/downloads/). Ensure that `python` and `pip` commands are in your system's PATH.
-
------
-
-## 5\. Getting Started
-
-This section guides you through cloning the repository, installing project-specific dependencies, and running both the backend and frontend applications.
-
-### 5.1. Clone the Repository
-
-Once Git is installed (as per [Section 4.1](#41-git)), open your terminal or command prompt, navigate to your desired workspace directory, and run the following command:
+Once Git is installed, open your terminal or command prompt and run the following command:
 
 ```bash
 git clone https://github.com/vlenci/desafio-api-python.git
 cd desafio-api-python
 ```
 
-You should now be in the root directory of the cloned project.
+After cloning, navigate into the project directory.
 
-### 5.2. Backend Setup and Run
+-----
 
-Follow these steps to set up and run the FastAPI backend. All commands should be run from the project's root directory (`desafio-api-python/`).
+## 5\. Installation Requirements
 
-1.  **Install Backend Dependencies**:
-    The backend Python packages are listed in the `requirements.txt` file. Install them using pip:
+To set up and run this project, you need to install the following dependencies for both the frontend and the backend.
+
+### 5.1. Frontend (Flutter)
+
+The Flutter frontend requires the Flutter SDK and a few Dart packages.
+
+  * **Flutter SDK**:
+    Install Flutter by following the official guide: [Flutter Get Started](https://flutter.dev/docs/get-started)
+
+  * **Dart Packages**:
+    The following packages are listed in `frontend_flutter/pubspec.yaml`:
+
+      * `http`: Used for making HTTP requests to the backend.
+      * `provider`: A state management solution for Flutter.
+
+    These packages will be installed automatically when you run `flutter pub get` in the `frontend_flutter` directory.
+
+### 5.2. Backend (FastAPI)
+
+The FastAPI backend is a Python application.
+
+  * **Python**:
+    Ensure you have Python 3.8+ installed. You can download it from the official Python website.
+
+  * **Python Packages**:
+    The backend dependencies are listed in the `requirements.txt` file. To install them, navigate to the project's root directory (`desafio-api-python/`) and run:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-    The `requirements.txt` should ideally contain:
+    The `requirements.txt` file contains:
 
     ```
     fastapi
@@ -142,11 +137,22 @@ Follow these steps to set up and run the FastAPI backend. All commands should be
     pydantic
     ```
 
-2.  **Important Note for Testers**:
-    To fully test the application, you will need credentials for an external API (`API_EXTERNAL_URL`, `API_USERNAME`, `API_PASSWORD`) which are configured in the `.env` file. **Please contact me to obtain these credentials, if you have permission, i will send them to you.**
+-----
 
-3.  **Create `.env` File**:
-    The backend uses `python-dotenv` to load environment variables. Create a file named `.env` **inside the `app/` directory** (`desafio-api-python/app/.env`) with the following content, using the credentials obtained:
+## 6\. How to Use
+
+Follow these steps to get the frontend and backend applications running.
+
+### 6.1. Backend Setup and Run
+
+1.  **Navigate to the project's root directory**:
+    Ensure you are in the main `desafio-api-python` directory (the one containing both `app` and `frontend_flutter`).
+
+2.  **Important Note for Testers**:
+    To fully test the application, you will need credentials for an external API (`API_EXTERNAL_URL`, `API_USERNAME`, `API_PASSWORD`) which are configured in the `.env` file. Please contact the project owner to obtain these credentials.
+
+3.  **Create a `.env` file**:
+    The backend uses `python-dotenv` to load environment variables from a `.env` file. Create a file named `.env` **inside the `app/` directory** with the following content, using the credentials obtained as mentioned above:
 
     ```
     API_EXTERNAL_URL=<YOUR_EXTERNAL_API_BASE_URL>
@@ -156,97 +162,47 @@ Follow these steps to set up and run the FastAPI backend. All commands should be
 
     Replace `<YOUR_EXTERNAL_API_BASE_URL>`, `<YOUR_EXTERNAL_API_USERNAME>`, and `<YOUR_EXTERNAL_API_PASSWORD>` with the actual credentials.
 
-4.  **Run the FastAPI Application**:
+4.  **Run the FastAPI application**:
     From the **root directory** of the project (e.g., `desafio-api-python`), run the following command:
 
     ```bash
     uvicorn app.main:app --reload
     ```
 
-    This will start the FastAPI server, typically accessible at `http://127.0.0.1:8000`. The `--reload` flag enables auto-reloading on code changes.
+    This will start the FastAPI server, typically accessible at `http://127.0.0.1:8000` by default. The `--reload` flag enables auto-reloading on code changes.
 
-### 5.3. Frontend Setup and Run
+### 6.2. Frontend Setup and Run
 
-Follow these steps to set up and run the Flutter frontend application.
-
-1.  **Navigate to the Frontend Directory**:
-    From the project's root directory (`desafio-api-python/`), navigate to the frontend:
+1.  **Navigate to the frontend directory**:
+    From the project's root directory, navigate to the frontend:
 
     ```bash
     cd frontend_flutter
     ```
 
-2.  **Get Flutter Packages**:
-    Install the Dart packages listed in `frontend_flutter/pubspec.yaml`:
+2.  **Get Flutter packages**:
 
     ```bash
     flutter pub get
     ```
 
-    The main packages are:
+3.  **Ensure the backend is running**:
+    The Flutter app connects to the backend at `http://10.0.2.2:8000` (for Android emulator). Make sure your FastAPI backend is accessible from this address or update the `baseUrl` in `frontend_flutter/lib/services/api_service.dart` if your backend is running on a different IP/port.
 
-      * `http`: Used for making HTTP requests to the backend.
-      * `provider`: A state management solution for Flutter.
-
-3.  **Ensure the Backend is Running**:
-    The Flutter app connects to the backend, by default at `http://10.0.2.2:8000` (this IP is typically used by Android emulators to refer to the host machine's `localhost`). Make sure your FastAPI backend (from [Section 5.2.4](#52-backend-setup-and-run)) is running and accessible. If your backend is on a different IP/port, or you're using a physical device, update the `baseUrl` in `frontend_flutter/lib/services/api_service.dart`.
-
-4.  **Run the Flutter Application**:
-    You can run the application on an attached device or an active emulator:
+4.  **Run the Flutter application**:
+    You can run the application on an attached device or emulator:
 
     ```bash
     flutter run
     ```
 
-    Or, to run on a specific device if multiple are connected:
+    Or, for a specific device:
 
     ```bash
     flutter run -d <device_id>
     ```
 
 -----
-
-## 6\. Application Screenshots and Usage Flow
-
-This section provides a visual overview of the application's main screens and user flow.
-
-1.  **Login Screen**:
-    The user starts at the login screen to enter their credentials.
-
-
-    <img src="./readme_images/login_app.png" alt="Application Login Screen" width="300" />
-
-    <br>
-2.  **Home Screen**:
-    After a successful login, the user is directed to the home screen, which provides options to view user data or consult the tree of a site.
-
-    <img src="./readme_images/home_app.png" alt="Application Home Screen" width="300" />
-
-    <br>
-3.  **User Data Screen (`/usercorp`)**:
-    Selecting "Ver Dados do Usuário" (View User Data) navigates to a screen that displays the user's corporate information retrieved from the API. This screen is important as it contains all the `site_id`, which is necessary for querying the tree structure.
-    
-    <img src="./readme_images/user_app.png" alt="Application User Data Screen" width="300" />
-    
-    <br>
-4.  **Tree Query Screen (`/implantation/mobile/tree`)**:
-    Selecting "Consultar Árvore" (Consult Tree) navigates to a screen where the user can input a `site_id`. This ID can be found in the user's data from the previous screen. Upon entering the `site_id` and submitting, the application fetches and displays the corresponding hierarchical tree structure.
-
-    <img src="./readme_images/tree1_app.png" alt="Application Tree Query Input Screen" width="300"/>
-    
-    <br>
-
-    <img src="./readme_images/tree2_app.png" alt="Application Tree Display Screen" width="300"/>
-    <br>
-
-**User Flow for Tree Consultation:**
-To effectively use the "Consultar Árvore" feature:
-
-1.  Log in to the application.
-2.  Navigate to "Ver Dados do Usuário" to view your user information and identify the relevant `site_id` from `sites` list.
-3.  Navigate to "Consultar Árvore".
-4.  Input the `site_id` obtained from your user data into the designated field.
-5.  Submit the query to view the tree structure.
 
 ## 7\. Authentication Flow
 
@@ -279,13 +235,13 @@ The authentication process uses JWT (JSON Web Tokens) and involves the following
 
       * When an `access_token` expires, or is about to expire, the frontend can use the `refresh_token` to request a new `access_token`.
       * The frontend sends the `refresh_token` to the `/token/refresh` endpoint.
-      * The backend validates the `refresh_token`. If valid, it issues a new `access_token`.
+      * The backend validates the `refresh_token`. If valid, it issues a new `access_token` (and potentially a new `refresh_token`, though this implementation seems to issue only a new access token).
       * This allows the user to stay logged in for an extended period without re-entering credentials, as long as the refresh token remains valid and secure.
 
 5.  **Token Expiration and Logout**:
 
       * If the `access_token` is expired and the `refresh_token` is also invalid or expired, the user must log in again.
-      * Securely storing tokens on the client-side (e.g., using Flutter's secure storage mechanisms) is crucial.
+      * Securely storing tokens on the client-side (e.g., using secure storage mechanisms) is crucial.
 
 This token-based authentication flow enhances security by minimizing the exposure of user credentials and providing a standard way to manage session validity.
 
