@@ -280,6 +280,7 @@ The authentication process uses JWT (JSON Web Tokens) and involves the following
       * The frontend sends the `refresh` to the `/token/refresh` endpoint.
       * The backend validates the `refresh`. If valid, it issues a new `access`.
       * This allows the user to stay logged in for an extended period without re-entering credentials, as long as the refresh token remains valid and secure.
+      * In my app, the token is refreshed every time the user selects the buttons "Consultar Árvore" or "Ver Dados do Usuário.".
 
 5.  **Token Expiration and Logout**:
 
@@ -349,8 +350,10 @@ The FastAPI backend exposes several endpoints. All authenticated endpoints requi
 * **Response Example - 401 (Unauthorized/Error)**:
     ```json
     {
+      "detail": {
         "detail": "Token is invalid or expired",
         "code": "token_not_valid"
+      }
     }
     ```
 * **Example Insomnia response**:<br>
@@ -382,8 +385,10 @@ The FastAPI backend exposes several endpoints. All authenticated endpoints requi
 * **Response Example - 401 (Unauthorized/Error)**:
     ```json
     {
+      "detail": {
         "detail": "Token is invalid or expired",
         "code": "token_not_valid"
+      }
     }
     ```
 * **Example Insomnia response**:<br>
