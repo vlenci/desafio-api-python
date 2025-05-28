@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  bool _obscureText = true;
   bool _loading = false;
 
   Future<void> _login() async {
@@ -78,8 +79,20 @@ class _LoginPageState extends State<LoginPage> {
             ),
             TextField(
               controller: _password,
-              decoration: const InputDecoration(labelText: 'Senha'),
-              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Senha',
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                  icon: Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off,
+                  ),
+                ),
+              ),
+              obscureText: _obscureText,
             ),
             const SizedBox(height: 20),
             _loading
