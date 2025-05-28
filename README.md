@@ -159,10 +159,14 @@ Follow these steps to set up and run the FastAPI backend. All commands should be
     From the **root directory** of the project (e.g., `desafio-api-python`), run the following command:
 
     ```bash
-    uvicorn app.main:app --reload
+    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ```
 
-    This will start the FastAPI server, typically accessible at `http://127.0.0.1:8000`. The `--reload` flag enables auto-reloading on code changes.
+    This command starts the FastAPI server.
+    * The `--host 0.0.0.0` flag makes the server listen on all available network interfaces, allowing it to be accessed from other devices on the same local network (e.g., a physical mobile device for testing the Flutter app) using your machine's local IP address (e.g., `http://192.168.X.X:8000`).
+    * It will also be accessible locally via `http://127.0.0.1:8000` or `http://localhost:8000`.
+    * The `--port 8000` specifies the port on which the server will listen.
+    * The `--reload` flag enables automatic reloading of the server when code changes are detected, which is useful during development.
 
 ### 5.3. Frontend Setup and Run
 
