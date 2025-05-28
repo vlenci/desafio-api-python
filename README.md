@@ -217,7 +217,7 @@ This section provides a visual overview of the application's main screens and us
 
     <br>
 2.  **Home Screen**:
-    After a successful login, the user is directed to the home screen, which provides options to view user data or consult the tree of a site.
+    After a successful login, the user is directed to the home screen, which provides options to view user data ("Ver Dados do Usuário") or consult the tree of a site ("Consultar Árvore").
 
     <img src="./readme_images/home_app.png" alt="Application Home Screen" width="300" />
 
@@ -281,11 +281,6 @@ The authentication process uses JWT (JSON Web Tokens) and involves the following
       * The backend validates the `refresh`. If valid, it issues a new `access`.
       * This allows the user to stay logged in for an extended period without re-entering credentials, as long as the refresh token remains valid and secure.
       * In my app, the token is refreshed every time the user selects the buttons "Consultar Árvore" or "Ver Dados do Usuário.".
-
-5.  **Token Expiration and Logout**:
-
-      * If the `access` is expired and the `refresh` is also invalid or expired, the user must log in again.
-      * Securely storing tokens on the client-side (e.g., using Flutter's secure storage mechanisms) is crucial.
 
 This token-based authentication flow enhances security by minimizing the exposure of user credentials and providing a standard way to manage session validity.
 
