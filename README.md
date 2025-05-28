@@ -13,7 +13,7 @@
   DISCLAIMER
 </h2>
 <p align="center">
-    This project is for study purposes only. It is not an official product of SEMEQ.
+    This project is for study purposes only. It is NOT an official product of SEMEQ.
 </p>
 
 ## Summary
@@ -43,7 +43,6 @@ This project implements a mobile application with a Flutter frontend that intera
 
 <img src="./readme_images/architerure_overview_diagram.jpg" alt="Architecture Overview Diagram" width="900" />
 
-<br>
 The data flow usually starts from the frontend, which sends requests to the backend. The backend, in turn, processes these requests, interacts with the external API, and returns the responses to the frontend.
 
 ## 3\. Project Structure
@@ -257,13 +256,13 @@ The authentication process uses JWT (JSON Web Tokens) and involves the following
       * The user provides `username` and `password` via the frontend.
       * The backend authenticates these credentials against the external API.
       * If successful, the backend generates two tokens:
-          * `access_token`: A short-lived token used to authenticate subsequent requests to protected endpoints.
-          * `refresh_token`: A longer-lived token used to obtain a new `access_token` when the current one expires, without requiring the user to log in again.
+          * `access`: A short-lived token used to authenticate subsequent requests to protected endpoints.
+          * `refresh`: A longer-lived token used to obtain a new `access` when the current one expires, without requiring the user to log in again.
       * Both tokens are sent back to the frontend.
 
 2.  **Using the Access Token**:
 
-      * For every request to a protected endpoint (e.g., `/usercorp`, `/implantation/mobile/tree`), the frontend must include the `access_token` in the `Authorization` header as a Bearer token:
+      * For every request to a protected endpoint (e.g., `/usercorp`, `/implantation/mobile/tree`), the frontend must include the `access` in the `Authorization` header as a Bearer token:
         ```
         Authorization: Bearer YOUR_ACCESS_TOKEN
         ```
@@ -271,27 +270,26 @@ The authentication process uses JWT (JSON Web Tokens) and involves the following
 
 3.  **Token Validation (`/token/verify`)**:
 
-      * This endpoint can be used to check if an `access_token` is still valid.
-      * The frontend sends the `access_token`.
+      * This endpoint can be used to check if an `access` is still valid.
+      * The frontend sends the `access`.
       * The backend verifies its signature and expiration. It returns a confirmation or an error.
 
 4.  **Token Renewal (`/token/refresh`)**:
 
-      * When an `access_token` expires, or is about to expire, the frontend can use the `refresh_token` to request a new `access_token`.
-      * The frontend sends the `refresh_token` to the `/token/refresh` endpoint.
-      * The backend validates the `refresh_token`. If valid, it issues a new `access_token`.
+      * When an `access` expires, or is about to expire, the frontend can use the `refresh` to request a new `access`.
+      * The frontend sends the `refresh` to the `/token/refresh` endpoint.
+      * The backend validates the `refresh`. If valid, it issues a new `access`.
       * This allows the user to stay logged in for an extended period without re-entering credentials, as long as the refresh token remains valid and secure.
 
 5.  **Token Expiration and Logout**:
 
-      * If the `access_token` is expired and the `refresh_token` is also invalid or expired, the user must log in again.
+      * If the `access` is expired and the `refresh` is also invalid or expired, the user must log in again.
       * Securely storing tokens on the client-side (e.g., using Flutter's secure storage mechanisms) is crucial.
 
 This token-based authentication flow enhances security by minimizing the exposure of user credentials and providing a standard way to manage session validity.
 
------
-
-## 8\. API Call Examples
+---
+## 8. API Call Examples
 
 The FastAPI backend exposes several endpoints. All authenticated endpoints require an `Authorization` header with a Bearer token.
 
@@ -299,96 +297,260 @@ The FastAPI backend exposes several endpoints. All authenticated endpoints requi
 
 ### 8.1. Authentication Endpoints
 
-#### 8.1.1. Login (Get Token)
+#### 8.1.1. Login
 
-  * **Endpoint**: `/token`
-  * **Method**: `POST`
-  * **Description**: Authenticates a user and returns access and refresh tokens.
-  * **Request Body**:
+* **Endpoint**: `/token`
+* **Method**: `POST`
+* **Description**: Authenticates a user and returns access and refresh tokens.
+* **Request Body**:
     ```json
     {
-      "username": "your_username",
-      "password": "your_password"
+      "username": "testuser",
+      "password": "password123"
     }
     ```
-  * **Example `curl` command**:
+* **Example `curl` command**:
     ```bash
     curl -X POST "http://127.0.0.1:8000/token" \
          -H "Content-Type: application/json" \
-         -d '{ "username": "your_username", "password": "your_password" }'
+         -d '{ "username": "testuser", "password": "password123" }'
     ```
-  * **Example Insomnia response**:<br>
+* **Response Example - 200 (Success)**:
+    ```json
+    {
+        "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+    ```
+* **Example Insomnia response**:<br>
     <img src="./readme_images/token.png" alt="Example in Insomnia of POST /token" width="900" />
 
 #### 8.1.2. Verify Token
 
-  * **Endpoint**: `/token/verify`
-  * **Method**: `POST`
-  * **Description**: Verifies the validity of an access token.
-  * **Request Body**:
+* **Endpoint**: `/token/verify`
+* **Method**: `POST`
+* **Description**: Verifies the validity of an access token.
+* **Request Body**:
     ```json
     {
-      "token": "your_access_token"
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     }
     ```
-  * **Example `curl` command**:
+* **Example `curl` command**:
     ```bash
     curl -X POST "http://127.0.0.1:8000/token/verify" \
          -H "Content-Type: application/json" \
          -d '{ "token": "your_access_token" }'
     ```
-  * **Example Insomnia response**:<br>
+* **Response Example - 200 (Success)**:
+    ```json
+    {}
+    ```
+* **Response Example - 401 (Unauthorized/Error)**:
+    ```json
+    {
+        "detail": "Token is invalid or expired",
+        "code": "token_not_valid"
+    }
+    ```
+* **Example Insomnia response**:<br>
     <img src="./readme_images/verify.png" alt="Example in Insomnia of POST /verify" width="900" />
 
 #### 8.1.3. Refresh Token
 
-  * **Endpoint**: `/token/refresh`
-  * **Method**: `POST`
-  * **Description**: Uses a refresh token to obtain a new access token.
-  * **Request Body**:
+* **Endpoint**: `/token/refresh`
+* **Method**: `POST`
+* **Description**: Uses a refresh token to obtain a new access token.
+* **Request Body**:
     ```json
     {
-      "token": "your_refresh_token"
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     }
     ```
-  * **Example `curl` command**:
+* **Example `curl` command**:
     ```bash
     curl -X POST "http://127.0.0.1:8000/token/refresh" \
          -H "Content-Type: application/json" \
          -d '{ "token": "your_refresh_token" }'
     ```
-  * **Example Insomnia response**:<br>
+* **Response Example - 200 (Success)**:
+    ```json
+    {
+        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+    ```
+* **Response Example - 401 (Unauthorized/Error)**:
+    ```json
+    {
+        "detail": "Token is invalid or expired",
+        "code": "token_not_valid"
+    }
+    ```
+* **Example Insomnia response**:<br>
     <img src="./readme_images/refresh.png" alt="Example in Insomnia of POST /refresh" width="900" />
 
 ### 8.2. Data Endpoints (Requires Authentication)
 
 #### 8.2.1. Get User Data
 
-  * **Endpoint**: `/usercorp`
-  * **Method**: `GET`
-  * **Description**: Retrieves user-specific data from the external API. Requires a valid access token.
-  * **Authentication**: Bearer Token in `Authorization` header.
-  * **Example `curl` command**:
+* **Endpoint**: `/usercorp`
+* **Method**: `GET`
+* **Description**: Retrieves user-specific data from the external API. Requires a valid access token.
+* **Authentication**: Bearer Token in `Authorization` header.
+* **Example `curl` command**:
     ```bash
     curl -X GET "http://127.0.0.1:8000/usercorp" \
          -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
     ```
-  * **Example Insomnia response**:<br>
+* **Response Example - 200 (Success)**:
+    ```json
+    {
+        "user": {
+            "id": 9901,
+            "username": "fictional_user",
+            "first_name": "Fictional",
+            "last_name": "User",
+            "email": "f.user@genericdomain.com"
+        },
+        "corporation": [
+            {
+                "id": 8801,
+                "name": "Generic Corp"
+            }
+        ],
+        "sites": [
+            {
+                "id": 7701,
+                "name": "Alpha Site",
+                "corporation": 8801
+            },
+            {
+                "id": 7702,
+                "name": "Beta Site",
+                "corporation": 8801
+            }
+        ]
+    }
+    ```
+* **Response Example - 403 (Forbidden/Error)**:
+    ```json
+    {
+      "detail": "Not authenticated"
+    }
+    ```
+* **Response Example - 403 (Forbidden/Error)**:
+    ```json
+    {
+        "detail": "Given token not valid for any token type",
+        "code": "token_not_valid",
+        "messages": [
+            {
+                "token_class": "AccessToken",
+                "token_type": "access",
+                "message": "Token is invalid or expired"
+            }
+        ]
+    }
+    ```
+* **Response Example - 404 (Not Found)**:
+    ```json
+    {
+      "detail": {
+        "detail": "No Site matches the given query."
+      }
+    }
+    ```
+* **Example Insomnia response**:<br>
     <img src="./readme_images/usercorp.png" alt="Example in Insomnia of GET /usercorp" width="900" />
 
-#### 8.2.2. Get Implantation Tree
+#### 8.2.2. Get Tree
 
-  * **Endpoint**: `/implantation/mobile/tree`
-  * **Method**: `GET`
-  * **Description**: Fetches a hierarchical tree structure based on a `site_id` from the external API. Requires a valid access token.
-  * **Query Parameters**:
-      * `site_id`: Integer, the ID of the site to retrieve the tree for.
-  * **Authentication**: Bearer Token in `Authorization` header.
-  * **Example `curl` command**:
+* **Endpoint**: `/implantation/mobile/tree`
+* **Method**: `GET`
+* **Description**: Fetches a hierarchical tree structure based on a `site_id` from the external API. Requires a valid access token.
+* **Query Parameters**:
+    * `site_id`: Integer, the ID of the site to retrieve the tree for.
+* **Authentication**: Bearer Token in `Authorization` header.
+* **Example `curl` command**:
     ```bash
-    curl -X GET "http://127.0.0.1:8000/implantation/mobile/tree?site_id=123" \
+    curl -X GET "http://127.0.0.1:8000/implantation/mobile/tree?site_id=7701" \
          -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
     ```
-  * **Example Insomnia response**:<br>
+* **Response Example - 200 (Success)**:
+    ```json
+    {
+        "id": 7701,
+        "name": "Alpha Site",
+        "revision": 105,
+        "tree": [
+            {
+                "id": 6001,
+                "asset_type": 1,
+                "group": "building_section",
+                "status": true,
+                "name": "Main Hall",
+                "tag": "MH-001",
+                "level": 1,
+                "order": 1,
+                "parent": null,
+                "site": 7701
+            },
+            {
+                "id": 6002,
+                "asset_type": 2,
+                "group": "floor_level",
+                "status": true,
+                "name": "Ground Floor",
+                "tag": "GF",
+                "level": 2,
+                "order": 1,
+                "parent": 6001,
+                "site": 7701
+            },
+            {
+                "id": 6003,
+                "asset_type": 3,
+                "group": "room_unit",
+                "status": false,
+                "name": "Storage Room A",
+                "tag": "STR-A",
+                "level": 3,
+                "order": 1,
+                "parent": 6002,
+                "site": 7701
+            }
+        ]
+    }
+    ```
+* **Response Example - 403 (Forbidden/Error)**:
+    ```json
+    {
+      "detail": "Not authenticated"
+    }
+    ```
+* **Response Example - 403 (Forbidden/Error)**:
+    ```json
+    {
+      "detail": {
+        "detail": "Given token not valid for any token type",
+        "code": "token_not_valid",
+        "messages": [
+          {
+            "token_class": "AccessToken",
+            "token_type": "access",
+            "message": "Token is invalid or expired"
+          }
+        ]
+      }
+    }
+    ```
+* **Response Example - 404 (Not Found/Error)**:
+    ```json
+    {
+        "detail": "Requested site or tree data not found."
+    }
+    ```
+* **Example Insomnia response**:<br>
     <img src="./readme_images/tree.png" alt="Example in Insomnia of GET /tree" width="900" />
 
+---
